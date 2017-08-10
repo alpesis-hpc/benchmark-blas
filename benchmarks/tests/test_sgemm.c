@@ -30,7 +30,7 @@ int main(void) {
   for (size_t i=0; i<n*k; ++i) { host_b[i] = -8.199f; }
   for (size_t i=0; i<m*n; ++i) { host_c[i] = 0.0f; }
 
-  sgemm_data * data = (sgemm_data*)malloc(sizeof(sgemm_data));
+  sgemm_data_cl * data = (sgemm_data_cl*)malloc(sizeof(sgemm_data_cl));
   sgemm_clblast_init (nvidia_engine, data, m, n, k, host_a, host_b, host_c);
 
   double tic = wtime();
@@ -46,7 +46,7 @@ int main(void) {
   printf ("(sgemm)(clblast) time collapsed: %f\n", toc - tic);
 
   // clean up
-  sgemm_data_del (data);
+  sgemm_data_cl_del (data);
   engine_cl_del (nvidia_engine);
   devices_cl_del (nvidia);
   free (host_a);

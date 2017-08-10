@@ -13,10 +13,10 @@ typedef struct
   cl_mem device_a;
   cl_mem device_b;
   cl_mem device_c;
-} sgemm_data;
+} sgemm_data_cl;
 
 
-void sgemm_clblast_init (engine_cl * t, sgemm_data * data,
+void sgemm_clblast_init (engine_cl * t, sgemm_data_cl * data,
                          const size_t m,
                          const size_t n,
                          const size_t k,
@@ -24,7 +24,7 @@ void sgemm_clblast_init (engine_cl * t, sgemm_data * data,
                          const float * host_b,
                          float * host_c);
 
-void sgemm_clblast_compute (engine_cl * t, sgemm_data * data,
+void sgemm_clblast_compute (engine_cl * t, sgemm_data_cl * data,
                             const size_t m,
                             const size_t n,
                             const size_t k,
@@ -34,6 +34,6 @@ void sgemm_clblast_compute (engine_cl * t, sgemm_data * data,
                             const float beta,
                             const size_t ldc);
 
-void sgemm_data_del (sgemm_data * data);
+void sgemm_data_cl_del (sgemm_data_cl * data);
 
 #endif

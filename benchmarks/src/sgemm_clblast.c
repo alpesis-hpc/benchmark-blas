@@ -16,7 +16,7 @@
 #include "benchmarks/sgemm_clblast.h"
 
 
-void sgemm_clblast_init (engine_cl * t, sgemm_data * data,
+void sgemm_clblast_init (engine_cl * t, sgemm_data_cl * data,
                          const size_t m,
                          const size_t n,
                          const size_t k,
@@ -33,7 +33,7 @@ void sgemm_clblast_init (engine_cl * t, sgemm_data * data,
 }
 
 
-void sgemm_clblast_compute (engine_cl * t, sgemm_data * data,
+void sgemm_clblast_compute (engine_cl * t, sgemm_data_cl * data,
                             const size_t m,
                             const size_t n,
                             const size_t k,
@@ -66,7 +66,7 @@ void sgemm_clblast_compute (engine_cl * t, sgemm_data * data,
 }
 
 
-void sgemm_data_del (sgemm_data * data)
+void sgemm_data_cl_del (sgemm_data_cl * data)
 {
   clReleaseMemObject (data->device_a);
   clReleaseMemObject (data->device_b);
