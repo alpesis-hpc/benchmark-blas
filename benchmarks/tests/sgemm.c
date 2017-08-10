@@ -13,6 +13,8 @@
 // Includes the CLBlast library (C interface)
 #include <clblast_c.h>
 
+#include "benchmarks/timer.h"
+
 // =================================================================================================
 
 // Example use of the single-precision routine SGEMM
@@ -68,6 +70,7 @@ int main(void) {
   clEnqueueWriteBuffer(queue, device_c, CL_TRUE, 0, m*n*sizeof(float), host_c, 0, NULL, NULL);
 
   // Call the SGEMM routine.
+  double tic = wtime();
   CLBlastStatusCode status = CLBlastSgemm(CLBlastLayoutRowMajor,
                                           CLBlastTransposeNo, CLBlastTransposeNo,
                                           m, n, k,
@@ -77,6 +80,8 @@ int main(void) {
                                           beta,
                                           device_c, 0, c_ld,
                                           &queue, &event);
+  double toc = wtime();
+  printf ("(sgemm)(clblast) time: %f\n", toc - tic);
 
   // Wait for completion
   if (status == CLBlastSuccess) {

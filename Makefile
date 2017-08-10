@@ -33,7 +33,11 @@ CC = gcc
 
 CC_OPTS_DEBUG = -std=c99
 
-CC_CFLAGS = $(CC_OPTS_DEBUG) -I$(CUDA_INC_DIR) -I$(CLBLAST_INC_DIR)
+CC_CFLAGS = $(CC_OPTS_DEBUG) \
+            -I$(CUDA_INC_DIR) \
+            -I$(CLBLAST_INC_DIR) \
+            -I$(INC_DIR)
+
 CC_LDFLAGS = -L$(CUDA_LIB_DIR) -lOpenCL \
              -L$(CLBLAST_LIB_DIR) -lclblast
 
@@ -43,7 +47,7 @@ CC_LDFLAGS = -L$(CUDA_LIB_DIR) -lOpenCL \
 SRC_SOURCES := $(wildcard $(SRC_DIR)/*.c)
 SRC_OBJECTS := $(patsubst %, $(BUILD_SRC_DIR)/%, $(notdir $(SRC_SOURCES:.c=.o)))
 
-build_srcs: $(SRC_OBJECSTS)
+build_srcs: $(SRC_OBJECTS)
 
 $(BUILD_SRC_DIR)/%.o : $(SRC_DIR)/%.c
 	@echo "$(RED)Compiling $< $(NC)"
@@ -60,7 +64,7 @@ build_tests: $(TESTS_TARGETS)
 
 $(BUILD_TESTS_DIR)/% : $(BUILD_TESTS_DIR)/%.o
 	@echo "$(RED)Linking $@ $(NC)"
-	$(CC) $(CC_CFLAGS) -o $@ $^ $(CC_LDFLAGS)
+	$(CC) $(CC_CFLAGS) -o $@ $^ $(SRC_OBJECTS) $(CC_LDFLAGS)
 
 $(BUILD_TESTS_DIR)/%.o : $(TESTS_DIR)/%.c
 	@echo "$(RED)Compiling $< $(NC)"
