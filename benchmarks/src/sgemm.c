@@ -10,6 +10,8 @@
 
 #define CL_USE_DEPRECATED_OPENCL_1_2_APIS // to disable deprecation warnings
 
+#include <openblas_config.h>
+#include <cblas.h>
 #include <cublas.h>
 #include <clblast_c.h>
 
@@ -58,6 +60,20 @@ void sgemm_data_cpu_del (sgemm_data_cpu * data_cpu)
   free (data_cpu->host_c);
   free (data_cpu->host_c_base);
   free (data_cpu);
+}
+
+
+/* --------------------------------------------------------------------------------------------- */
+
+void sgemm_openblas_compute (sgemm_data_cpu * data_cpu)
+{
+  cblas_sgemm (CblasRowMajor, CblasNoTrans, CblasNoTrans,
+               data_cpu->m, data_cpu->n, data_cpu->k,
+               data_cpu->alpha,
+               data_cpu->host_a, data_cpu->lda,
+               data_cpu->host_b, data_cpu->ldb,
+               data_cpu->beta, 
+               data_cpu->host_c, data_cpu->ldc); 
 }
 
 

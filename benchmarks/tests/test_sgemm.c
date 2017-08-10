@@ -9,6 +9,13 @@
 #include "benchmarks/sgemm.h"
 
 
+void test_sgemm_openblas (sgemm_data_cpu * data_cpu)
+{
+  sgemm_openblas_compute (data_cpu);
+  data_copy (data_cpu->host_c_base, data_cpu->host_c, data_cpu->m*data_cpu->n);
+}
+
+
 void test_sgemm_cublas (sgemm_data_cpu * data_cpu)
 {
   // engine_cu_init ();
@@ -67,10 +74,11 @@ int main(void)
   sgemm_data_cpu_init (data_cpu, alpha, beta, m, n, k, lda, ldb, ldc);
 
   // tests
+  test_sgemm_openblas (data_cpu);
   test_sgemm_cublas (data_cpu);
   data_copy (data_cpu->host_c_base, data_cpu->host_c, data_cpu->m*data_cpu->n);
   data_constant_init (data_cpu->host_c, data_cpu->m*data_cpu->n, 0.0f);
-  test_sgemm_clblast (data_cpu);
+  // test_sgemm_clblast (data_cpu);
 
   // eval
   // eval_results (data_cpu->host_c_base, data_cpu->host_c, data_cpu->m * data_cpu->n);

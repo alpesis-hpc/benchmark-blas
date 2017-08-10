@@ -59,6 +59,11 @@ void sgemm_data_cpu_init (sgemm_data_cpu * data_cpu,
 void sgemm_data_cpu_del (sgemm_data_cpu * data_cpu);
 
 /* --------------------------------------------------------------------------------------------- */
+// openblas
+
+void sgemm_openblas_compute (sgemm_data_cpu * data_cpu);
+
+/* --------------------------------------------------------------------------------------------- */
 // cublas
 
 void sgemm_cublas_init (sgemm_data_cu * data_cu, sgemm_data_cpu * data_cpu);
