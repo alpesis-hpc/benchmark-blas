@@ -10,6 +10,7 @@
 
 #define CL_USE_DEPRECATED_OPENCL_1_2_APIS // to disable deprecation warnings
 
+#include <cublas.h>
 #include <clblast_c.h>
 
 #include "benchmarks/engine_cl.h"
@@ -40,11 +41,13 @@ void sgemm_data_cpu_init (sgemm_data_cpu * data,
   data->host_a = (float*)malloc(sizeof(float)*m*k);
   data->host_b = (float*)malloc(sizeof(float)*n*k);
   data->host_c = (float*)malloc(sizeof(float)*m*n);
+  data->host_c_base = (float*)malloc(sizeof(float)*m*n);
 
   size_t i;
   for (i = 0; i < m*k; ++i) { data->host_a[i] = (float)rand() / (float)RAND_MAX; }; 
   for (i = 0; i < n*k; ++i) { data->host_b[i] = (float)rand() / (float)RAND_MAX; }; 
   for (i = 0; i < m*n; ++i) { data->host_c[i] = 0.0f; }; 
+  for (i = 0; i < m*n; ++i) { data->host_c_base[i] = 0.0f; }; 
 }
 
 
@@ -56,6 +59,49 @@ void sgemm_data_cpu_del (sgemm_data_cpu * data_cpu)
   free (data_cpu);
 }
 
+
+/* --------------------------------------------------------------------------------------------- */
+// cublas
+
+void sgemm_cublas_init (sgemm_data_cu * data_cu, sgemm_data_cpu * data_cpu)
+{
+  cublasStatus status;
+  status = cublasAlloc (data_cpu->m*data_cpu->k, sizeof(float), (void**)&data_cu->device_a);
+  status = cublasAlloc (data_cpu->k*data_cpu->n, sizeof(float), (void**)&data_cu->device_b);
+  status = cublasAlloc (data_cpu->m*data_cpu->n, sizeof(float), (void**)&data_cu->device_c);
+  if (status != CUBLAS_STATUS_SUCCESS)
+    fprintf (stderr, "(NVIDIA CUDA) device memory allocation error.\n");
+
+  status = cublasSetVector (data_cpu->m*data_cpu->n, sizeof(float), data_cpu->host_a, 1, data_cu->device_a, 1);
+  status = cublasSetVector (data_cpu->k*data_cpu->n, sizeof(float), data_cpu->host_b, 1, data_cu->device_b, 1);
+  status = cublasSetVector (data_cpu->m*data_cpu->n, sizeof(float), data_cpu->host_c, 1, data_cu->device_c, 1);
+}
+
+
+void sgemm_cublas_compute (sgemm_data_cu * data_cu, sgemm_data_cpu * data_cpu)
+{
+  cublasStatus status;
+  cublasGetError ();
+
+  cublasSgemm ('n', 'n', 
+               data_cpu->m,
+               data_cpu->n,
+               data_cpu->k,
+               data_cpu->alpha,
+               data_cu->device_a, data_cpu->m,
+               data_cu->device_b, data_cpu->k,
+               data_cpu->beta,
+               data_cu->device_c, data_cpu->m);
+  status = cublasGetError ();
+  if (status != CUBLAS_STATUS_SUCCESS)
+    fprintf (stderr, "(NVIDIA CUDA) device kernel execution error.\n");
+}
+
+
+void sgemm_data_cu_del (sgemm_data_cu * data_cu)
+{
+  free (data_cu);
+}
 
 /* --------------------------------------------------------------------------------------------- */
 // clblast
@@ -131,9 +177,8 @@ void sgemm_clblast_compute (engine_cl * t, sgemm_data_cl * data_cl, sgemm_data_c
     clWaitForEvents(1, &t->event);
     clReleaseEvent(t->event);
   }
-
-  // Example completed. See "clblast_c.h" for status codes (0 -> success).
-  printf("Completed SGEMM with status %d\n", status);
+  else
+    fprintf (stderr, "(NVIDIA OpenCL) kernel execution error.\n");
 }
 
 

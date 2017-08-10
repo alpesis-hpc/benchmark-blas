@@ -13,19 +13,28 @@ typedef struct
   float alpha;
   float beta;
 
-  size_t m;
-  size_t n;
-  size_t k;
+  unsigned int m;
+  unsigned int n;
+  unsigned int k;
 
-  size_t lda;
-  size_t ldb;
-  size_t ldc;
+  unsigned int lda;
+  unsigned int ldb;
+  unsigned int ldc;
 
   float * host_a;
   float * host_b;
   float * host_c;
+  float * host_c_base;
 
 } sgemm_data_cpu;
+
+
+typedef struct
+{
+  float * device_a;
+  float * device_b;
+  float * device_c;
+} sgemm_data_cu;
 
 
 typedef struct
@@ -36,6 +45,7 @@ typedef struct
 } sgemm_data_cl;
 
 /* --------------------------------------------------------------------------------------------- */
+// sgemm_data_cpu
 
 void sgemm_data_cpu_init (sgemm_data_cpu * data_cpu,
                           const float alpha,
@@ -48,6 +58,13 @@ void sgemm_data_cpu_init (sgemm_data_cpu * data_cpu,
                           const size_t ldc)
 ;
 void sgemm_data_cpu_del (sgemm_data_cpu * data_cpu);
+
+/* --------------------------------------------------------------------------------------------- */
+// cublas
+
+void sgemm_cublas_init (sgemm_data_cu * data_cu, sgemm_data_cpu * data_cpu);
+void sgemm_cublas_compute (sgemm_data_cu * data_cu, sgemm_data_cpu * data_cpu);
+void sgemm_data_cu_del (sgemm_data_cu * data_cu);
 
 /* --------------------------------------------------------------------------------------------- */
 // clblast
