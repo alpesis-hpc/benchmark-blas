@@ -13,8 +13,11 @@
 #include <clblast_c.h>
 
 #include "benchmarks/engine_cl.h"
-#include "benchmarks/sgemm_clblast.h"
+#include "benchmarks/sgemm.h"
 
+
+/* --------------------------------------------------------------------------------------------- */
+// clblast
 
 void sgemm_clblast_init (engine_cl * t, sgemm_data_cl * data,
                          const size_t m,

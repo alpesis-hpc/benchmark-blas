@@ -10,11 +10,37 @@
 
 typedef struct
 {
+  const float alpha;
+  const float beta;
+
+  const size_t m;
+  const size_t n;
+  const size_t k;
+
+  const size_t lda;
+  const size_t ldb;
+  const size_t ldc;
+
+  const float * host_a;
+  const float * host_b;
+  float * host_c;
+
+} sgemm_data_cpu;
+
+
+typedef struct
+{
   cl_mem device_a;
   cl_mem device_b;
   cl_mem device_c;
 } sgemm_data_cl;
 
+/* --------------------------------------------------------------------------------------------- */
+
+void sgemm_data_cpu_init (sgemm_data_cpu * data);
+
+/* --------------------------------------------------------------------------------------------- */
+// clblast
 
 void sgemm_clblast_init (engine_cl * t, sgemm_data_cl * data,
                          const size_t m,

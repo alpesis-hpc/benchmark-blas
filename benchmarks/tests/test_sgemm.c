@@ -3,7 +3,7 @@
 
 #include "benchmarks/engine_cl.h"
 #include "benchmarks/timer.h"
-#include "benchmarks/sgemm_clblast.h"
+#include "benchmarks/sgemm.h"
 
 
 int main(void) {
