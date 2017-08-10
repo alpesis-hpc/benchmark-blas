@@ -55,8 +55,7 @@ void sgemm_data_cpu_init (sgemm_data_cpu * data_cpu,
                           const size_t k,
                           const size_t lda,
                           const size_t ldb,
-                          const size_t ldc)
-;
+                          const size_t ldc);
 void sgemm_data_cpu_del (sgemm_data_cpu * data_cpu);
 
 /* --------------------------------------------------------------------------------------------- */
@@ -64,6 +63,7 @@ void sgemm_data_cpu_del (sgemm_data_cpu * data_cpu);
 
 void sgemm_cublas_init (sgemm_data_cu * data_cu, sgemm_data_cpu * data_cpu);
 void sgemm_cublas_compute (sgemm_data_cu * data_cu, sgemm_data_cpu * data_cpu);
+void sgemm_cublas_buffer (sgemm_data_cu * data_cu, sgemm_data_cpu * data_cpu);
 void sgemm_data_cu_del (sgemm_data_cu * data_cu);
 
 /* --------------------------------------------------------------------------------------------- */
@@ -71,6 +71,7 @@ void sgemm_data_cu_del (sgemm_data_cu * data_cu);
 
 void sgemm_clblast_init (engine_cl * t, sgemm_data_cl * data_cl, sgemm_data_cpu * data_cpu);
 void sgemm_clblast_compute (engine_cl * t, sgemm_data_cl * data_cl, sgemm_data_cpu * data_cpu);
+void sgemm_clblast_buffer (engine_cl * t, sgemm_data_cl * data_cl, sgemm_data_cpu * data_cpu);
 void sgemm_data_cl_del (sgemm_data_cl * data_cl);
 
 #endif

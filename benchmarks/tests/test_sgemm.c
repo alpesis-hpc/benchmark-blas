@@ -4,6 +4,8 @@
 #include "benchmarks/engine_cu.h"
 #include "benchmarks/engine_cl.h"
 #include "benchmarks/timer.h"
+#include "benchmarks/data.h"
+#include "benchmarks/eval.h"
 #include "benchmarks/sgemm.h"
 
 
@@ -17,6 +19,8 @@ void test_sgemm_cublas (sgemm_data_cpu * data_cpu)
   sgemm_cublas_compute (data_cu, data_cpu);
   double toc = wtime();
   printf ("(sgemm)(cublas) time collapsed: %f\n", toc - tic);
+
+  sgemm_cublas_buffer (data_cu, data_cpu);
 
   sgemm_data_cu_del (data_cu);
   engine_cu_del ();
@@ -38,6 +42,8 @@ void test_sgemm_clblast (sgemm_data_cpu * data_cpu)
   sgemm_clblast_compute (nvidia_engine, data_cl, data_cpu);
   double toc = wtime();
   printf ("(sgemm)(clblast) time collapsed: %f\n", toc - tic);
+
+  sgemm_clblast_buffer (nvidia_engine, data_cl, data_cpu);
 
   // clean up
   sgemm_data_cl_del (data_cl);
@@ -62,7 +68,12 @@ int main(void)
 
   // tests
   test_sgemm_cublas (data_cpu);
+  data_copy (data_cpu->host_c_base, data_cpu->host_c, data_cpu->m*data_cpu->n);
+  data_constant_init (data_cpu->host_c, data_cpu->m*data_cpu->n, 0.0f);
   test_sgemm_clblast (data_cpu);
+
+  // eval
+  eval_results (data_cpu->host_c_base, data_cpu->host_c, data_cpu->m * data_cpu->n);
   
   // delete
   sgemm_data_cpu_del (data_cpu);

@@ -99,6 +99,17 @@ void sgemm_cublas_compute (sgemm_data_cu * data_cu, sgemm_data_cpu * data_cpu)
 }
 
 
+void sgemm_cublas_buffer (sgemm_data_cu * data_cu, sgemm_data_cpu * data_cpu)
+{
+  cublasStatus status;
+  status = cublasGetVector (data_cpu->m * data_cpu->n, sizeof(float), 
+                            data_cu->device_c, 1, data_cpu->host_c, 1);
+  if (status != CUBLAS_STATUS_SUCCESS)
+    fprintf (stderr, "(NVIDIA CUDA) device buffer access error.\n");
+                                                
+}
+
+
 void sgemm_data_cu_del (sgemm_data_cu * data_cu)
 {
   cublasFree (data_cu->device_a);
@@ -183,6 +194,23 @@ void sgemm_clblast_compute (engine_cl * t, sgemm_data_cl * data_cl, sgemm_data_c
   }
   else
     fprintf (stderr, "(NVIDIA OpenCL) kernel execution error.\n");
+}
+
+
+void sgemm_clblast_buffer (engine_cl * t, sgemm_data_cl * data_cl, sgemm_data_cpu * data_cpu)
+{
+  CLBlastStatusCode status;
+  status = clEnqueueReadBuffer (t->queue, 
+                                data_cl->device_c, 
+                                CL_TRUE, 
+                                0, 
+                                sizeof(float)*data_cpu->m*data_cpu->n,
+                                data_cpu->host_c,
+                                0,
+                                NULL,
+                                NULL);
+  if (status != CLBlastSuccess)
+    fprintf (stderr, "(NVIDIA OpenCL) buffer access error.\n");
 }
 
 
