@@ -14,44 +14,34 @@ int main(void) {
   engine_cl * nvidia_engine = (engine_cl*)malloc(sizeof(engine_cl));
   engine_cl_init (nvidia_engine, nvidia);
 
+  const float alpha = 0.7f;
+  const float beta = 1.0f;
   const size_t m = 128;
   const size_t n = 64;
   const size_t k = 512;
-  const float alpha = 0.7f;
-  const float beta = 1.0f;
   const size_t lda = k;
   const size_t ldb = n;
   const size_t ldc = n;
+  sgemm_data_cpu * data_cpu = (sgemm_data_cpu*)malloc(sizeof(sgemm_data_cpu));
+  sgemm_data_cpu_init (data_cpu, alpha, beta, m, n, k, lda, ldb, ldc);
 
-  float* host_a = (float*)malloc(sizeof(float)*m*k);
-  float* host_b = (float*)malloc(sizeof(float)*n*k);
-  float* host_c = (float*)malloc(sizeof(float)*m*n);
-  for (size_t i=0; i<m*k; ++i) { host_a[i] = 12.193f; }
-  for (size_t i=0; i<n*k; ++i) { host_b[i] = -8.199f; }
-  for (size_t i=0; i<m*n; ++i) { host_c[i] = 0.0f; }
+  // for (size_t i=0; i<m*k; ++i) { host_a[i] = 12.193f; }
+  // for (size_t i=0; i<n*k; ++i) { host_b[i] = -8.199f; }
+  // for (size_t i=0; i<m*n; ++i) { host_c[i] = 0.0f; }
 
-  sgemm_data_cl * data = (sgemm_data_cl*)malloc(sizeof(sgemm_data_cl));
-  sgemm_clblast_init (nvidia_engine, data, m, n, k, host_a, host_b, host_c);
+  sgemm_data_cl * data_cl = (sgemm_data_cl*)malloc(sizeof(sgemm_data_cl));
+  sgemm_clblast_init (nvidia_engine, data_cl, data_cpu);
 
   double tic = wtime();
-  sgemm_clblast_compute (nvidia_engine, data,
-                m, n, k,
-                alpha,
-                lda,
-                ldb,
-                beta,
-                ldc);
-
+  sgemm_clblast_compute (nvidia_engine, data_cl, data_cpu);
   double toc = wtime();
   printf ("(sgemm)(clblast) time collapsed: %f\n", toc - tic);
 
   // clean up
-  sgemm_data_cl_del (data);
+  sgemm_data_cl_del (data_cl);
   engine_cl_del (nvidia_engine);
   devices_cl_del (nvidia);
-  free (host_a);
-  free (host_b);
-  free (host_c);
+  sgemm_data_cpu_del (data_cpu);
 
   return 0;
 }
