@@ -14,7 +14,8 @@
 
 #include "benchmarks/engine_cl.h"
 
-int sgemm_clblast(engine_cl * t,
+
+void sgemm_clblast(engine_cl * t,
                   const size_t m,
                   const size_t n,
                   const size_t k,
@@ -24,31 +25,6 @@ int sgemm_clblast(engine_cl * t,
                   const float beta,
                   float * host_c, const size_t ldc) 
 {
-
-  // OpenCL platform/device settings
-  // const size_t platform_id = 0;
-  // const size_t device_id = 0;
-
-
-  // Initializes the OpenCL platform
-  // cl_uint num_platforms;
-  // clGetPlatformIDs(0, NULL, &num_platforms);
-  // cl_platform_id* platforms = (cl_platform_id*)malloc(num_platforms*sizeof(cl_platform_id));
-  // clGetPlatformIDs(num_platforms, platforms, NULL);
-  // cl_platform_id platform = platforms[platform_id];
-
-  // Initializes the OpenCL device
-  // cl_uint num_devices;
-  // clGetDeviceIDs(platform, CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices);
-  // cl_device_id* devices = (cl_device_id*)malloc(num_devices*sizeof(cl_device_id));
-  // clGetDeviceIDs(platform, CL_DEVICE_TYPE_ALL, num_devices, devices, NULL);
-  // cl_device_id device = devices[device_id];
-
-  // Creates the OpenCL context, queue, and an event
-  // cl_context context = clCreateContext(NULL, 1, &device, NULL, NULL, NULL);
-  // cl_command_queue queue = clCreateCommandQueue(context, device, 0, NULL);
-  // cl_event event = NULL;
-
   // Copy the matrices to the device
   cl_mem device_a = clCreateBuffer(t->context, CL_MEM_READ_WRITE, m*k*sizeof(float), NULL, NULL);
   cl_mem device_b = clCreateBuffer(t->context, CL_MEM_READ_WRITE, n*k*sizeof(float), NULL, NULL);
@@ -77,14 +53,8 @@ int sgemm_clblast(engine_cl * t,
   // Example completed. See "clblast_c.h" for status codes (0 -> success).
   printf("Completed SGEMM with status %d\n", status);
 
-  // Clean-up
-  // free(platforms);
-  // free(devices);
   clReleaseMemObject(device_a);
   clReleaseMemObject(device_b);
   clReleaseMemObject(device_c);
-  // clReleaseCommandQueue(queue);
-  // clReleaseContext(context);
-  return 0;
 }
 
