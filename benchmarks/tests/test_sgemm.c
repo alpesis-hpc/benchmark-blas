@@ -11,7 +11,7 @@
 
 void test_sgemm_cublas (sgemm_data_cpu * data_cpu)
 {
-  engine_cu_init ();
+  // engine_cu_init ();
   sgemm_data_cu * data_cu = (sgemm_data_cu*)malloc(sizeof(sgemm_data_cu));
   sgemm_cublas_init (data_cu, data_cpu);
 
@@ -23,7 +23,7 @@ void test_sgemm_cublas (sgemm_data_cpu * data_cpu)
   sgemm_cublas_buffer (data_cu, data_cpu);
 
   sgemm_data_cu_del (data_cu);
-  engine_cu_del ();
+  // engine_cu_del ();
 }
 
 
@@ -73,7 +73,7 @@ int main(void)
   test_sgemm_clblast (data_cpu);
 
   // eval
-  eval_results (data_cpu->host_c_base, data_cpu->host_c, data_cpu->m * data_cpu->n);
+  // eval_results (data_cpu->host_c_base, data_cpu->host_c, data_cpu->m * data_cpu->n);
   
   // delete
   sgemm_data_cpu_del (data_cpu);
