@@ -59,6 +59,12 @@ $(BUILD_SRC_DIR)/%.o : $(SRC_DIR)/%.c
 TESTS_SOURCES := $(wildcard $(TESTS_DIR)/*.c)
 TESTS_OBJECTS := $(patsubst %, $(BUILD_TESTS_DIR)/%, $(notdir $(TESTS_SOURCES:.c=.o)))
 TESTS_TARGETS := $(patsubst %, $(BUILD_TESTS_DIR)/%, $(notdir $(TESTS_OBJECTS:.o=)))
+
+run_tests:
+	@echo "$(RED) run tests:$(NC)"
+	$(foreach test, $(TESTS_TARGETS), \
+          $(test) | grep "FAIL"; \
+          echo "$(GREEN) TEST $(test)$(NC)";)	
 	
 build_tests: $(TESTS_TARGETS)
 
@@ -71,6 +77,15 @@ $(BUILD_TESTS_DIR)/%.o : $(TESTS_DIR)/%.c
 	$(CC) $(CC_CFLAGS) -c $< -o $@
 
 # ------------------------------------------------------------------------------------------------
+# console
+
+RED = \033[1;31m
+GREEN = \033[1;32m
+BLUE = \033[1;34m
+YELLOW = \033[1;33m
+NC = \033[1;0m
+
+# ------------------------------------------------------------------------------------------------
 # commands
 
 init:
@@ -78,7 +93,7 @@ init:
 	mkdir -p $(BUILD_SRC_DIR)
 	mkdir -p $(BUILD_TESTS_DIR)
 
-all: clean init build_srcs build_tests
+all: clean init build_srcs build_tests run_tests
 
 
 clean:
