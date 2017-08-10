@@ -1,0 +1,10 @@
+prefix=/home/kelly/Studio/kelly/k/blas-benchmarks/benchmarks/libs/clblast
+exec_prefix=${prefix}
+includedir=${prefix}/include
+libdir=${exec_prefix}/lib
+
+Name: CLBlast
+Description: CLBlast is a modern, lightweight, performant and tunable OpenCL BLAS library written in C++11
+Version: 1.0.1
+Libs: -L${libdir} -lclblast
+Cflags: -I${includedir}
