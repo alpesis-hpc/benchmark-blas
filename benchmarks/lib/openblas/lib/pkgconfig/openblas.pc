@@ -1,0 +1,9 @@
+libdir=/home/kelly/Studio/kelly/k/blas-benchmarks/benchmarks/lib/openblas/lib
+includedir=/home/kelly/Studio/kelly/k/blas-benchmarks/benchmarks/lib/openblas/include
+
+Name: OpenBLAS
+Description: OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version
+Version: 
+URL: https://github.com/xianyi/OpenBLAS
+Libs: -L${libdir} -lopenblas
+Cflags: -I${includedir}
