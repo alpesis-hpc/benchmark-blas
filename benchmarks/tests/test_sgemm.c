@@ -6,7 +6,7 @@
 #include "benchmarks/sgemm.h"
 
 
-void test_clblast (sgemm_data_cpu * data_cpu)
+void test_sgemm_clblast (sgemm_data_cpu * data_cpu)
 {
   devices_cl * nvidia = (devices_cl*)malloc(sizeof(devices_cl));
   devices_cl_init (nvidia);
@@ -29,7 +29,9 @@ void test_clblast (sgemm_data_cpu * data_cpu)
 }
 
 
-int main(void) {
+int main(void) 
+{
+  // init
   const float alpha = 0.7f;
   const float beta = 1.0f;
   const size_t m = 128;
@@ -41,8 +43,10 @@ int main(void) {
   sgemm_data_cpu * data_cpu = (sgemm_data_cpu*)malloc(sizeof(sgemm_data_cpu));
   sgemm_data_cpu_init (data_cpu, alpha, beta, m, n, k, lda, ldb, ldc);
 
-  test_clblast (data_cpu);
+  // tests
+  test_sgemm_clblast (data_cpu);
   
+  // delete
   sgemm_data_cpu_del (data_cpu);
 
   return 0;

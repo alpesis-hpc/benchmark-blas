@@ -27,18 +27,34 @@ CUDA_INC_DIR = /usr/local/cuda/include
 CUDA_LIB_DIR = /usr/local/cuda/lib64
 
 # ------------------------------------------------------------------------------------------------
-# compiler
+# compiler: gcc
 
-CC = gcc
+#
+#CC_GCC = gcc
 
-CC_OPTS_DEBUG = -std=c99
+#CC_OPTS_DEBUG = -std=c99
+
+#CC_CFLAGS = $(CC_OPTS_DEBUG) \
+#            -I$(CUDA_INC_DIR) \
+#            -I$(CLBLAST_INC_DIR) \
+#            -I$(INC_DIR)
+
+#CC_LDFLAGS = -L$(CUDA_LIB_DIR) -lOpenCL \
+#             -L$(CLBLAST_LIB_DIR) -lclblast
+
+# ------------------------------------------------------------------------------------------------
+# compiler: nvcc
+
+CC_GCC = nvcc
+
+CC_OPTS_DEBUG = 
 
 CC_CFLAGS = $(CC_OPTS_DEBUG) \
             -I$(CUDA_INC_DIR) \
             -I$(CLBLAST_INC_DIR) \
             -I$(INC_DIR)
 
-CC_LDFLAGS = -L$(CUDA_LIB_DIR) -lOpenCL \
+CC_LDFLAGS = -L$(CUDA_LIB_DIR) -lm -lcublas -lOpenCL \
              -L$(CLBLAST_LIB_DIR) -lclblast
 
 # ------------------------------------------------------------------------------------------------
