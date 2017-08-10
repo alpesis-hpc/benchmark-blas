@@ -56,6 +56,7 @@ void sgemm_data_cpu_del (sgemm_data_cpu * data_cpu)
   free (data_cpu->host_a);
   free (data_cpu->host_b);
   free (data_cpu->host_c);
+  free (data_cpu->host_c_base);
   free (data_cpu);
 }
 
@@ -100,6 +101,9 @@ void sgemm_cublas_compute (sgemm_data_cu * data_cu, sgemm_data_cpu * data_cpu)
 
 void sgemm_data_cu_del (sgemm_data_cu * data_cu)
 {
+  cublasFree (data_cu->device_a);
+  cublasFree (data_cu->device_b);
+  cublasFree (data_cu->device_c);
   free (data_cu);
 }
 

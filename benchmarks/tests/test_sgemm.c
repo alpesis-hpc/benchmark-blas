@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "benchmarks/engine_cu.h"
 #include "benchmarks/engine_cl.h"
 #include "benchmarks/timer.h"
 #include "benchmarks/sgemm.h"
@@ -8,6 +9,7 @@
 
 void test_sgemm_cublas (sgemm_data_cpu * data_cpu)
 {
+  engine_cu_init ();
   sgemm_data_cu * data_cu = (sgemm_data_cu*)malloc(sizeof(sgemm_data_cu));
   sgemm_cublas_init (data_cu, data_cpu);
 
@@ -17,6 +19,7 @@ void test_sgemm_cublas (sgemm_data_cpu * data_cpu)
   printf ("(sgemm)(cublas) time collapsed: %f\n", toc - tic);
 
   sgemm_data_cu_del (data_cu);
+  engine_cu_del ();
 }
 
 
