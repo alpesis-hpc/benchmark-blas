@@ -56,11 +56,12 @@ CC_CFLAGS = $(CC_OPTS_DEBUG) \
             -I$(CUDA_INC_DIR) \
             -I$(CLBLAST_INC_DIR) \
             -I$(OPENBLAS_LIB_DIR) \
+            -I$(LIB_DIR) \
             -I$(INC_DIR)
 
 CC_LDFLAGS = -L$(CUDA_LIB_DIR) -lm -lcublas -lOpenCL \
              -L$(CLBLAST_LIB_DIR) -lclblast \
-             -L$(OPENBLAS_LIB_DIR) -lopenblas -llapack
+             -L$(OPENBLAS_LIB_DIR) -lopenblas 
 
 # ------------------------------------------------------------------------------------------------
 # src

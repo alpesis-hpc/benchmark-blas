@@ -17,7 +17,7 @@ void eval_results (float * result_cpu, float * result_gpu, const unsigned int co
     if (tmp*tmp < TOLERANCE*TOLERANCE)
       correct++;
     else
-      printf ("index %d: tmp %f result_expected %f result_compute %f\n", i, result_cpu[i], result_gpu[i]);
+      printf ("index %d: tmp %f result_expected %f result_computed %f\n", i, result_cpu[i], result_gpu[i]);
   }
 
   printf ("Corrections: %d out of %d results were correct.\n", correct, count);

@@ -10,8 +10,8 @@
 
 #define CL_USE_DEPRECATED_OPENCL_1_2_APIS // to disable deprecation warnings
 
-#include <openblas_config.h>
-#include <cblas.h>
+#include <openblas/include/openblas_config.h>
+#include <openblas/include/cblas.h>
 #include <cublas.h>
 #include <clblast_c.h>
 
